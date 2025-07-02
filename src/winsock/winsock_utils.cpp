@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#include "winsock.h"
+
 #pragma comment(lib, "ws2_32.lib")  // Автоматично додає бібліотеку Ws2_32.lib для лінкування
 
 bool initialize_winsock() {

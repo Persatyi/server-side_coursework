@@ -1,10 +1,22 @@
 #include <iostream>
 
-#include "../src/winsock/winsock_utils.h"
+#include "socket_utils.h"
+#include "winsock_utils.h"
 
 int main() {
-  if (!initialize_winsock()) return 1;
-  cleanup_winsock();
+  // WinSock initialization
+  if (!initialize_winsock()) {
+    return 1;
+  }
+
+  // Server socket initialization
+  SOCKET server_socket = create_server_socket();
+  if (server_socket == INVALID_SOCKET) {
+    cleanup_winsock();
+    return 1;
+  } else {
+    std::cout << "Server socket initialization is OK" << std::endl;
+  }
 
   return 0;
 }
