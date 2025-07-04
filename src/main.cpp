@@ -1,10 +1,12 @@
+#include <winsock2.h>
+
 #include <iostream>
 
 #include "socket_utils.h"
 #include "winsock_utils.h"
 
 int main() {
-  const int kPortNum = 0;  // Enter Open working server port
+  const int kPortNum = 12345;  // Enter Open working server port
 
   // WinSock initialization
   if (!initialize_winsock()) {
@@ -30,6 +32,18 @@ int main() {
   } else {
     std::cout << "Binding socket to server info is OK" << std::endl;
   }
+
+  // Starting to listen to any Clients
+  if (!start_listening(server_socket)) {
+    std::cerr << "Listen failed. Error: " << WSAGetLastError() << std::endl;
+    closesocket(server_socket);
+    cleanup_winsock();
+    return 1;
+  }
+  std::cout << "Server is listening..." << std::endl;
+
+  closesocket(server_socket);
+  cleanup_winsock();
 
   return 0;
 }

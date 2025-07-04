@@ -9,4 +9,7 @@ SOCKET create_server_socket();
 // Прив'язка сокета до порту
 bool bind_server_socket(SOCKET socket, int port);
 
+// Починаємо слухати порт
+bool start_listening(SOCKET socket);
+
 #endif  // SOCKET_UTILS_H_
