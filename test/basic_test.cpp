@@ -19,6 +19,15 @@ int main() {
     return 1;
   }
   std::cout << "[TEST] Passed: socket created" << std::endl;
+
+  bool is_bool_bind_success = bind_server_socket(sock, 1235);  // будь-який не-зайнятий порт
+  if (!is_bool_bind_success) {
+    closesocket(sock);
+    cleanup_winsock();
+    std::cerr << "[TEST] Failed: Socket binding. Error #" << WSAGetLastError() << std::endl;
+  }
+  std::cout << "[TEST] Passed: socket bound successfully" << std::endl;
+
   closesocket(sock);
   cleanup_winsock();
 
