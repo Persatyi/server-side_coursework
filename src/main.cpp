@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+#include "connection_utils.h"
 #include "socket_utils.h"
 #include "winsock_utils.h"
 
@@ -45,6 +46,22 @@ int main() {
   }
   std::cout << "Server is listening..." << std::endl;
 
+  // Client socket creation and acception in case of connection
+  SOCKET client_socket = accept_client(server_socket);
+  if (client_socket == INVALID_SOCKET) {
+    std::cout << "Client detected, but can't connect to a client. Error # " << WSAGetLastError()
+              << std::endl;
+    closesocket(server_socket);
+    cleanup_winsock();
+    return 1;
+  } else {
+    // Наприклад, можна щось надіслати клієнту:
+    std::string welcome = "Welcome!\n";
+    send(client_socket, welcome.c_str(), welcome.size(), 0);
+  }
+
+  // Закриваємо клієнта після обробки
+  closesocket(client_socket);
   closesocket(server_socket);
   cleanup_winsock();
 
