@@ -1,12 +1,14 @@
 #include <winsock2.h>
 
 #include <iostream>
+#include <string>
 
 #include "socket_utils.h"
 #include "winsock_utils.h"
 
 int main() {
-  const int kPortNum = 12345;  // Enter Open working server port
+  const std::string kServer_IP = "127.0.0.1";  // Enter local Server IP address
+  constexpr int kPortNum = 8080;               // Enter Open working server port
 
   // WinSock initialization
   if (!initialize_winsock()) {
@@ -24,13 +26,14 @@ int main() {
   }
 
   // Server socket binding
-  if (!bind_server_socket(server_socket, kPortNum)) {
+  if (!bind_server_socket(server_socket, kPortNum, kServer_IP)) {
     std::cerr << "Error Socket binding. Error #" << WSAGetLastError() << std::endl;
     closesocket(server_socket);
     cleanup_winsock();
     return 1;
   } else {
     std::cout << "Binding socket to server info is OK" << std::endl;
+    std::cout << "Binding to IP: " << kServer_IP << ", port: " << kPortNum << std::endl;
   }
 
   // Starting to listen to any Clients

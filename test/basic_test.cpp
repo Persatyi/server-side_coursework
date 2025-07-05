@@ -1,14 +1,17 @@
 #include <winsock2.h>
 
 #include <iostream>
+#include <string>
 
 #include "socket_utils.h"
 #include "winsock_utils.h"
 
 int main() {
+  const std::string kServer_IP = "127.0.0.1";  // Enter local Server IP address
+  constexpr int kPortNum = 8080;               // Enter Open working server port
+
   if (initialize_winsock()) {
     std::cout << "[TEST] WinSock init OK" << std::endl;
-    cleanup_winsock();
   } else {
     std::cerr << "[TEST] WinSock init FAILED" << std::endl;
     return 1;
@@ -23,7 +26,7 @@ int main() {
   }
   std::cout << "[TEST] Passed: socket created" << std::endl;
 
-  bool is_bool_bind_success = bind_server_socket(sock, 1236);  // будь-який не-зайнятий порт
+  bool is_bool_bind_success = bind_server_socket(sock, kPortNum);  // будь-який не-зайнятий порт
   if (!is_bool_bind_success) {
     closesocket(sock);
     cleanup_winsock();

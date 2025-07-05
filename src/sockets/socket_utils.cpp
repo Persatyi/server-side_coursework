@@ -1,5 +1,7 @@
 #include <ws2tcpip.h>
 
+#pragma comment(lib, "Ws2_32.lib")
+
 #include <iostream>
 
 SOCKET create_server_socket() {
@@ -12,16 +14,30 @@ SOCKET create_server_socket() {
   return server_socket;
 }
 
-bool bind_server_socket(SOCKET socket, int port) {
+bool bind_server_socket(SOCKET socket, int port, const std::string& ipAddress = "") {
   sockaddr_in serverInfo;
   // Initializing servInfo structure
   ZeroMemory(&serverInfo, sizeof(serverInfo));
 
-  serverInfo.sin_family = AF_INET;     // AF_INET для інтернет підключень
-  serverInfo.sin_addr = {INADDR_ANY};  // Прив'язка до всіх інтерфейсів
-  serverInfo.sin_port = htons(port);   // Переводить int порт у мережевий формат
+  serverInfo.sin_family = AF_INET;    // AF_INET для інтернет підключень
+  serverInfo.sin_port = htons(port);  // Переводить int порт у мережевий формат
 
-  return bind(socket, reinterpret_cast<sockaddr*>(&serverInfo), sizeof(serverInfo));
+  if (!ipAddress.empty()) {
+    // Якщо IP задано явно — перетворюємо з тексту в двійковий формат
+    if (inet_pton(AF_INET, ipAddress.c_str(), &serverInfo.sin_addr) <= 0) {
+      std::cerr << "inet_pton failed for address: " << ipAddress << std::endl;
+      return false;
+    }
+  } else {
+    serverInfo.sin_addr = {INADDR_ANY};  // Прив'язка до всіх інтерфейсів
+  }
+
+  int result = bind(socket, reinterpret_cast<sockaddr*>(&serverInfo), sizeof(serverInfo));
+  if (result == SOCKET_ERROR) {
+    return false;
+  }
+
+  return true;
 }
 
 bool start_listening(SOCKET socket) {
