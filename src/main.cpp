@@ -3,14 +3,13 @@
 #include <iostream>
 #include <string>
 
+#include "client_session.h"
+#include "config.h"
 #include "connection_utils.h"
 #include "socket_utils.h"
 #include "winsock_utils.h"
 
 int main() {
-  const std::string kServer_IP = "127.0.0.1";  // Enter local Server IP address
-  constexpr int kPortNum = 8080;               // Enter Open working server port
-
   // WinSock initialization
   if (!initialize_winsock()) {
     return 1;
@@ -60,6 +59,8 @@ int main() {
     send(client_socket, welcome.c_str(), welcome.size(), 0);
   }
 
+  // Exchange text data between Server and Client. Disconnection if a client send "xxx"
+  handle_client_session(client_socket);
   // Закриваємо клієнта після обробки
   closesocket(client_socket);
   closesocket(server_socket);
