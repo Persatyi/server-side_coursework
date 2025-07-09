@@ -1,5 +1,6 @@
 #include "client_session.h"
 
+#include <cstring>
 #include <iostream>
 #include <vector>
 
