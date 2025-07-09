@@ -43,7 +43,11 @@ void handle_client_session(SOCKET client_sock) {
     }
 
     // Відправляємо повідомлення клієнту
-    send(client_sock, clientBuff.data(), strlen(clientBuff.data()), 0);
+    packet_size = send(client_sock, clientBuff.data(), strlen(clientBuff.data()), 0);
+    if (packet_size == SOCKET_ERROR) {
+      std::cerr << "Can't send message to client. Error # " << WSAGetLastError() << "\n";
+      break;  // Завершуємо сесію з клієнтом
+    }
   }
 
   // Завершення сесії

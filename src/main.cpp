@@ -61,6 +61,7 @@ int main() {
 
   // Exchange text data between Server and Client. Disconnection if a client send "xxx"
   handle_client_session(client_socket);
+
   // Закриваємо клієнта після обробки
   closesocket(client_socket);
   closesocket(server_socket);
