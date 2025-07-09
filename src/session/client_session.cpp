@@ -26,7 +26,6 @@ void handle_client_session(SOCKET client_sock) {
     if (packet_size <= 0) {
       break;
     }
-
     // Виводимо повідомлення клієнта в консоль:
     std::cout << "Client: " << std::string(servBuff.data(), packet_size) << "\n";
 

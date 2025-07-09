@@ -42,5 +42,6 @@ bool initialize_winsock() {
 }
 
 void cleanup_winsock() {
+  std::cout << "Cleanup called\n";
   WSACleanup();
 }
